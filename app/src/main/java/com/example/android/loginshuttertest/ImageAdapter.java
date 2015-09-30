@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -47,7 +48,7 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
-    public static Bitmap LoadImageFromWebOperations(String s) {
+    public static Bitmap getBitmap(String s) {
         try {
             URL url = new URL(s);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -57,22 +58,12 @@ public class ImageAdapter extends BaseAdapter {
         }
     }
 
-
     public View getView(int position, View convertView,ViewGroup parent){
+
         ImageView imageView = new ImageView(mContext);
-        //imageView.setImageResource(R.drawable.pic1);
-        imageView.setImageBitmap(LoadImageFromWebOperations(gallery.get(position)));
+        UrlImageViewHelper.setUrlDrawable(imageView, gallery.get(position));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(240, 240));
         return imageView;
-
-//        ImageView imageView = new ImageView(mContext);
-//        //imageView.setImageBitmap(LoadImageFromWebOperations(gallery.get(position)));
-//        imageView.setImageResource(R.drawable.pic1);
-//        // UrlImageViewHelper.setUrlDrawable(imageView, gallery.get(position));
-//        //imageView.setImageResource(mThumbsIds[position]);
-//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        imageView.setLayoutParams(new GridView.LayoutParams(240,240));
-//        return imageView;
     }
 }

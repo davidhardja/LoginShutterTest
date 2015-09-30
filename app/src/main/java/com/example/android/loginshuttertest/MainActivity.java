@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
                         String share_url = c.getString("thumb_url");
                         System.out.println("SHAREURL"+share_url);
                         galleryUrl.add(share_url);
-                        System.out.println("CANGCUNG"+galleryUrl.isEmpty());
+                        System.out.println("SHAREURL"+share_url);
 
                     }
                 } catch (JSONException e) {
