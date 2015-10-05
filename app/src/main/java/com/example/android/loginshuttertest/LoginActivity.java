@@ -34,29 +34,33 @@ public class LoginActivity extends Activity {
     public SessionManager session;
 
     //curl -X POST http://b.sso.ng/api/sign_in?email=asd%40gmail.com&password=12345678&device_type=android&app_version=1.0.0
-    //curl -X POST http://b.sso.ng/api/sign_in?email=asd@gmail.com\&password=12345678\&device_type=android\&app_version=1.0.0
+    //curl -X POST http://192.168.0.40:3000/sign_in?email=asd@gmail.com\&password=12345678\&device_type=android\&app_version=1.0.0
 
     //curl -X GET http://b.sso.ng/api/shuttersongs?access_token=xuQRNg49pXduomiZqkB8\&device_type=iOS\&app_version=1.0.0
-    //curl -X GET http://b.sso.ng/api/shuttersongs?access_token=mvaDzksq6spVMhvYGxVz\&device_type=iOS\&app_version=1.0.0
+    //curl -X GET 192.168.0.40:3000/api/shuttersongs?access_token=GDVGqWdvJDBefhaL4gML\&device_type=iOS\&app_version=1.0.0
 
     private final String url = "http://b.sso.ng/api/sign_in";
+    //private final String url = "http://192.168.0.40:3000/api/sign_in";
     private final String DEVICE_TYPE = "android";
     private final String VERSION_TYPE = "1.0.0";
 
-    private static final String TAG_CONTACTS = "contacts";
+
     private static final String TAG_ID = "id";
-    private static final String TAG_EMAIL = "email";
-    private static final String TAG_NAME = "name";
 
     public String returnID;
-    public String returnUsername;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        session = new SessionManager(getApplicationContext());
+        if(session.isLoggedIn()){
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            intent.putExtra("EMAIL",session.getEmail());
+            intent.putExtra("TOKEN",session.getToken());
+            startActivity(intent);
+            finish();
+        }
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -108,7 +112,7 @@ public class LoginActivity extends Activity {
             params.add(new BasicNameValuePair("app_version",VERSION_TYPE));
 
             String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST,params);
-            Log.d("Response: ", "> " + jsonStr);
+            Log.d("ResponseLOGIN: ", "> " + jsonStr);
 
             if (jsonStr != null) {
                 try {
@@ -116,7 +120,7 @@ public class LoginActivity extends Activity {
                         JSONObject jsonObj = new JSONObject(jsonStr);
                         returnID = jsonObj.getString(TAG_ID);
                         token = jsonObj.getString("access_token");
-                        session.setLogin(true);
+                        session.setLogin(true,email,token);
                     }else{
                         errorMsg = "Invalid Username or Password";
                     }

@@ -9,12 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-
+import android.widget.AdapterView.OnItemClickListener;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -30,11 +29,13 @@ public class MainActivity extends Activity {
     private Button btnLogout;
     private String ACCESS_TOKEN;
     private final String url = "http://b.sso.ng/api/shuttersongs";
+    //private final String url = "http://192.168.0.40:3000/api/shuttersongs";
     private final String DEVICE_TYPE = "android";
     private final String VERSION_TYPE = "1.0.0";
     public ProgressDialog pDialog;
     public JSONArray jsonArrayImage = null;
-    public ArrayList<String> galleryUrl;
+    public static ArrayList<Shuttersong> shuttersongsList;
+
     public GridView gridView;
 
     @Override
@@ -43,7 +44,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         session = new SessionManager(getApplicationContext());
         btnLogout = (Button) findViewById(R.id.btnLogout);
-        galleryUrl = new ArrayList<String>();
+        shuttersongsList = new ArrayList<Shuttersong>();
 
         if(!session.isLoggedIn()){
             logoutUser();
@@ -57,12 +58,22 @@ public class MainActivity extends Activity {
 
         new generateImage().execute();
         gridView = (GridView) findViewById(R.id.image_grid_view);
-        System.out.println("MABU" + galleryUrl.isEmpty());
 
-//        if(!galleryUrl.isEmpty()){
-//            gridView = (GridView) findViewById(R.id.image_grid_view);
-//            gridView.setAdapter(new ImageAdapter(this, galleryUrl));
-//        }
+        gridView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Intent i = new Intent(getApplicationContext(), DetailActivity.class);
+                String uuid = shuttersongsList.get(position).getUuid();
+                i.putExtra("uuid", uuid);
+                i.putExtra("token", ACCESS_TOKEN);
+                i.putExtra("id", position);
+                startActivity(i);
+            }
+        });
+
+        gridView.setAdapter(new ImageAdapter(this, shuttersongsList));
+        gridView.invalidateViews();
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -72,13 +83,13 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void inputAdapter(View view){
-        gridView.setAdapter(new ImageAdapter(this, galleryUrl));
-        gridView.invalidateViews();
-    }
+//    public void inputAdapter(View view){
+//        gridView.setAdapter(new ImageAdapter(this, shuttersongsList));
+//        gridView.invalidateViews();
+//    }
 
     public void logoutUser(){
-        session.setLogin(false);
+        session.setLogin(false,null,null);
         Intent intent = new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
         finish();
@@ -109,17 +120,38 @@ public class MainActivity extends Activity {
 
 
             if (jsonStr != null) {
-
+                System.out.println("TINGTONG");
                 try {
                     jsonArrayImage = new JSONArray(jsonStr);
-                    for (int i = 0; i < 16; i++)
-                    {
+                    for (int i = 0; i < 15; i++) {
                         JSONObject c = jsonArrayImage.getJSONObject(i);
-                        String share_url = c.getString("thumb_url");
-                        System.out.println("SHAREURL"+share_url);
-                        galleryUrl.add(share_url);
-                        System.out.println("SHAREURL"+share_url);
 
+                        String file_url = c.getString("file_url");
+                        String timeline_image_url = c.getString("timeline_image_url");
+                        String audio_url = c.getString("audio_url");
+                        String thumb_url = c.getString("thumb_url");
+                        String share_url = c.getString("thumb_url");
+
+//                        String file_url = "http://192.168.0.40:3000"+c.getString("file_url");
+//                        String timeline_image_url = c.getString("timeline_image_url");
+//                        String audio_url = "http://192.168.0.40:3000"+c.getString("audio_url");
+//                        String thumb_url = "http://192.168.0.40:3000"+c.getString("thumb_url");
+//                        String share_url = "http://192.168.0.40:3000"+c.getString("share_url");
+                        //System.out.println("THUMBURL"+thumb_url);
+                        String caption = null;
+                        String uuid = c.getString("uuid");
+                        boolean is_mine = Boolean.getBoolean(c.getString("is_mine"));
+                        int favorite_count = 0;
+                        int comment_count = 0;
+                        String song_title = null;
+                        String song_artist = null;
+                        String song_album = null;
+                        String created_at = c.getString("created_at");
+                        String updated_at = c.getString("updated_at");
+
+                        Shuttersong s = new Shuttersong(file_url,timeline_image_url,audio_url,thumb_url,share_url,
+                                caption,uuid,is_mine,favorite_count,comment_count,song_title,song_artist,song_album,created_at,updated_at);
+                        shuttersongsList.add(s);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

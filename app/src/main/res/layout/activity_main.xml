@@ -45,7 +45,7 @@
             android:layout_height="0dp">
         </GridView>
 
-        <Button
+        <!--Button
             android:onClick="inputAdapter"
             android:id="@+id/showImage"
             android:layout_width="fill_parent"
@@ -55,7 +55,7 @@
             android:text="Show Gallery"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="15dp" /-->
 
         <!--TextView
             android:id="@+id/email"
