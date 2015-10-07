@@ -40,7 +40,7 @@ public class LoginActivity extends Activity {
     //curl -X GET 192.168.0.40:3000/api/shuttersongs?access_token=GDVGqWdvJDBefhaL4gML\&device_type=iOS\&app_version=1.0.0
 
     private final String url = "http://b.sso.ng/api/sign_in";
-    //private final String url = "http://192.168.0.40:3000/api/sign_in";
+    //private final String url = "http://cakestaging-env.elasticbeanstalk.com/api/sign_in";
     private final String DEVICE_TYPE = "android";
     private final String VERSION_TYPE = "1.0.0";
 
@@ -84,7 +84,7 @@ public class LoginActivity extends Activity {
         String email;
         String password;
         String errorMsg;
-
+        String profilPicture;
 
         private checkLogin(String s, String p){
             email = s;
@@ -120,7 +120,8 @@ public class LoginActivity extends Activity {
                         JSONObject jsonObj = new JSONObject(jsonStr);
                         returnID = jsonObj.getString(TAG_ID);
                         token = jsonObj.getString("access_token");
-                        session.setLogin(true,email,token);
+                        profilPicture = jsonObj.getString("picture_thumb_url");
+                        session.setLogin(true,email,token,profilPicture);
                     }else{
                         errorMsg = "Invalid Username or Password";
                     }
@@ -144,6 +145,7 @@ public class LoginActivity extends Activity {
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     intent.putExtra("EMAIL",email);
                     intent.putExtra("TOKEN",token);
+                    intent.putExtra("PROFIL_PICTURE",profilPicture);
                     startActivity(intent);
                     finish();
                 }else if(!errorMsg.matches("")){

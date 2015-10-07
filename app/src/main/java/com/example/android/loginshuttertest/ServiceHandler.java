@@ -44,7 +44,7 @@ public class ServiceHandler {
                 if(params!=null){
                     String paramString = URLEncodedUtils.format(params,"utf-8");
                     httpPost.setEntity(new UrlEncodedFormEntity(params));
-                    System.out.println("YYYY" + url+paramString);
+                    //System.out.println("YYYY" + url+paramString);
                 }
 
                 httpResponse = httpClient.execute(httpPost);
@@ -52,7 +52,7 @@ public class ServiceHandler {
                 if(params!=null){
                     String paramString = URLEncodedUtils.format(params,"utf-8");
                     url += "?" + paramString;
-                    System.out.println("XXXX"+url);
+                    //System.out.println("XXXX"+url);
                 }
                 HttpGet httpGet = new HttpGet(url);
 

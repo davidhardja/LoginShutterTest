@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#B8B894">
+
+    <com.example.android.loginshuttertest.RoundedImageView
+        android:id="@+id/image_view_profile_pic"
+        android:src="@drawable/profile_pic_720"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <RelativeLayout
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:id="@+id/text_view_name_people"
+            android:text="Acongsky"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@id/text_view_name_people"
+            android:id="@+id/image_view_certified"
+            android:layout_width="12dp"
+            android:layout_height="12dp" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:layout_below="@id/text_view_name_people"
+            android:id="@+id/text_view_bio_people"
+            android:text="Bio Bla Bulb Blio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/text_view_follow_status"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="Follow +"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/follow_button_720"
+            android:layout_width="75dp"
+            android:layout_height="25dp" />
+    </RelativeLayout>
+
+
+
+</LinearLayout>

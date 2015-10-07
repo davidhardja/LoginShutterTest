@@ -2,25 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" >
+    tools:context="${relativePackage}.${activityClass}"
+    android:padding="0dp">
 
     <LinearLayout
-        android:layout_marginTop="42dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:orientation="vertical" >
-
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical">
         <TextView
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome"
             android:textSize="20dp" />
 
         <TextView
+            android:gravity="center"
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,46 +30,80 @@
             android:textColor="@color/lbl_name"
             android:textSize="24dp" />
 
-        <!--ImageView
-            android:id="@+id/image_grid_view"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/-->
 
-        <GridView
-            android:id="@+id/image_grid_view"
-            android:layout_weight="1"
+        <com.example.android.loginshuttertest.CustomScrollView
+            android:id="@+id/wrapper_scroll_view"
             android:layout_width="match_parent"
-            android:numColumns="auto_fit"
-            android:columnWidth="100dp"
-            android:horizontalSpacing="5dp"
-            android:verticalSpacing="5dp"
-            android:layout_height="0dp">
-        </GridView>
+            android:padding="0dp"
+            android:scrollbars="none"
+            android:layout_height="360dp">
 
-        <!--Button
-            android:onClick="inputAdapter"
-            android:id="@+id/showImage"
+            <LinearLayout
+                android:paddingTop="0dp"
+                android:id="@+id/wrapper_content_scroll_view"
+                android:layout_width="wrap_content"
+                android:layout_height="320dp"
+                android:orientation="vertical">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:background="#5e6266"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp" />
+
+                <LinearLayout
+                    android:id="@+id/wrapper_header"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_weight="2"
+                    android:layout_height="0dp"
+                    android:orientation="vertical">
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:background="#F3F4F4"
+                    android:id="@+id/wrapper_grid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical">
+
+                    <com.example.android.loginshuttertest.CustomGridView
+                        android:id="@+id/image_grid_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.example.android.loginshuttertest.CustomScrollView>
+
+        <Button
+            android:id="@+id/btnCommunity"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
-            android:background="@color/btn_login_bg"
-            android:text="Show Gallery"
+            android:layout_marginTop="10dip"
+            android:background="@color/btn_logut_bg"
+            android:text="Community"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="15dp" /-->
-
-        <!--TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13dp" /-->
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
+            android:layout_marginTop="10dip"
             android:background="@color/btn_logut_bg"
             android:text="@string/btn_logout"
             android:textAllCaps="false"

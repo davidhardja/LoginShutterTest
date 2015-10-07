@@ -25,6 +25,7 @@ public class SessionManager {
     private static final String PREF_NAME = "ShutterSongLogin";
     private static final String EMAIL_NAME = "EmailName";
     private static final String TOKEN_NAME = "TokenName";
+    private static final String PROFIL_URL = "ProfilUrl";
 
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 
@@ -34,15 +35,21 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(boolean isLoggedIn,String email, String token) {
+    public String getProfilUrl() {
+        return pref.getString(PROFIL_URL, null);
+    }
+
+    public void setLogin(boolean isLoggedIn,String email, String token,String pp) {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
         if(isLoggedIn==true){
             editor.putString(TOKEN_NAME, token);
             editor.putString(EMAIL_NAME,email);
+            editor.putString(PROFIL_URL,pp);
         }else{
             editor.putString(TOKEN_NAME, null);
             editor.putString(EMAIL_NAME, null);
+            editor.putString(PROFIL_URL, null);
         }
 
         // commit changes

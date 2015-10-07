@@ -37,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private String ACCESS_TOKEN;
     private final String url = "http://b.sso.ng/api/shuttersongs";
-    //private final String url = "http://192.168.0.40:3000/api/shuttersongs";
+    //private final String url = "http://cakestaging-env.elasticbeanstalk.com/api/shuttersongs";
     private final String DEVICE_TYPE = "android";
     private final String VERSION_TYPE = "1.0.0";
     private JSONArray jsonArrayText;
@@ -195,9 +195,6 @@ public class DetailActivity extends AppCompatActivity {
                         String comment = c.getString("full_text");
                         Comment comm = new Comment(username,comment);
                         commentList.add(comm);
-                        System.out.println("DODCEKuser" + user);
-                        System.out.println("DODCEKcomment"+comment);
-                        System.out.println("DODCEK"+commentList.isEmpty());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

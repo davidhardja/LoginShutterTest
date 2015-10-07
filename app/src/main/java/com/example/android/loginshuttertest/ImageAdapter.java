@@ -39,7 +39,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView,ViewGroup parent){
-        ImageView imageView = new ImageView(mContext);
+        RoundedImageView imageView = new RoundedImageView(mContext);
         UrlImageViewHelper.setUrlDrawable(imageView, gallery.get(position).getThumb_url());
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(240, 240));

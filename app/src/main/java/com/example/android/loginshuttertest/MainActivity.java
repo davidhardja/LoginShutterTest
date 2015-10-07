@@ -1,17 +1,18 @@
 package com.example.android.loginshuttertest;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import org.apache.http.NameValuePair;
@@ -23,20 +24,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
     private SessionManager session;
     private TextView email_text_view;
     private Button btnLogout;
+    private Button btnCommunity;
     private String ACCESS_TOKEN;
-    private final String url = "http://b.sso.ng/api/shuttersongs";
-    //private final String url = "http://192.168.0.40:3000/api/shuttersongs";
+    private final String url = "http://b.sso.ng/api/";
+    //private final String url = "http://cakestaging-env.elasticbeanstalk.com/api/";
     private final String DEVICE_TYPE = "android";
     private final String VERSION_TYPE = "1.0.0";
     public ProgressDialog pDialog;
     public JSONArray jsonArrayImage = null;
+    public ViewPager mPager;
+    public String urlProfilPicture="";
+    private PagerAdapter mPagerAdapter;
     public static ArrayList<Shuttersong> shuttersongsList;
 
-    public GridView gridView;
+    public CustomGridView gridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         session = new SessionManager(getApplicationContext());
         btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnCommunity =(Button) findViewById(R.id.btnCommunity);
         shuttersongsList = new ArrayList<Shuttersong>();
 
         if(!session.isLoggedIn()){
@@ -53,11 +59,18 @@ public class MainActivity extends Activity {
         Intent i = getIntent();
         String email = i.getStringExtra("EMAIL");
         ACCESS_TOKEN = i.getStringExtra("TOKEN");
+        urlProfilPicture = session.getProfilUrl();
         email_text_view = (TextView) findViewById(R.id.name);
         email_text_view.setText(email);
 
+
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlideAdapter(getSupportFragmentManager(),urlProfilPicture);
+
+
+        mPager.setAdapter(mPagerAdapter);
         new generateImage().execute();
-        gridView = (GridView) findViewById(R.id.image_grid_view);
+        gridView = (CustomGridView) findViewById(R.id.image_grid_view);
 
         gridView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -72,12 +85,19 @@ public class MainActivity extends Activity {
             }
         });
 
-        gridView.setAdapter(new ImageAdapter(this, shuttersongsList));
-        gridView.invalidateViews();
+
+        //gridView.invalidateViews();
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 logoutUser();
+            }
+
+        });
+
+        btnCommunity.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                goToCommunity();
             }
 
         });
@@ -88,8 +108,14 @@ public class MainActivity extends Activity {
 //        gridView.invalidateViews();
 //    }
 
+    public void goToCommunity(){
+        Intent intent = new Intent(MainActivity.this,CommunityActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void logoutUser(){
-        session.setLogin(false,null,null);
+        session.setLogin(false,null,null,null);
         Intent intent = new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
         finish();
@@ -102,7 +128,7 @@ public class MainActivity extends Activity {
             super.onPreExecute();
             pDialog = new ProgressDialog(MainActivity.this);
             pDialog.setMessage("Loading Image...");
-            pDialog.setCancelable(false);
+            pDialog.setCancelable(true);
             pDialog.show();
         }
 
@@ -115,7 +141,7 @@ public class MainActivity extends Activity {
             params.add(new BasicNameValuePair("device_type",DEVICE_TYPE));
             params.add(new BasicNameValuePair("app_version", VERSION_TYPE));
 
-            String jsonStr = sh.makeServiceCall(url, ServiceHandler.GET,params);
+            String jsonStr = sh.makeServiceCall(url+"shuttersongs", ServiceHandler.GET,params);
             Log.d("Response: ", "> " + jsonStr);
 
 
@@ -123,7 +149,7 @@ public class MainActivity extends Activity {
                 System.out.println("TINGTONG");
                 try {
                     jsonArrayImage = new JSONArray(jsonStr);
-                    for (int i = 0; i < 15; i++) {
+                    for (int i = 0; i < 21; i++) {
                         JSONObject c = jsonArrayImage.getJSONObject(i);
 
                         String file_url = c.getString("file_url");
@@ -168,6 +194,7 @@ public class MainActivity extends Activity {
             // Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
+                gridView.setAdapter(new ImageAdapter(MainActivity.this, shuttersongsList));
             }
         }
     }
@@ -190,8 +217,12 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);
     }
 }
+
+
+
