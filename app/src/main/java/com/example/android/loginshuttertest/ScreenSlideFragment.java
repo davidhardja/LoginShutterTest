@@ -18,7 +18,6 @@ public class ScreenSlideFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
-        System.out.println("DUREN"+rootView.getChildAt(0));
         return rootView;
     }
 
